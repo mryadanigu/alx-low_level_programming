@@ -1,14 +1,21 @@
 #include <unistd.h>
 
-/**
- * main - Entry point
- *
- * Description: Prints "_putchar" followed by a new line
- *
- * Return: Always 0 (Success)
- */
+int _putchar(char c)
+{
+    return write(1, &c, 1);
+}
+
 int main(void)
 {
-	write(STDOUT_FILENO, "_putchar\n", 9);
-	return (0);
+    _putchar('_');
+    _putchar('p');
+    _putchar('u');
+    _putchar('t');
+    _putchar('c');
+    _putchar('h');
+    _putchar('a');
+    _putchar('r');
+    _putchar('\n');
+
+    return 0;
 }
