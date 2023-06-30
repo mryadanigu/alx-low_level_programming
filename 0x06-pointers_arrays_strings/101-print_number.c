@@ -1,47 +1,47 @@
-#include "main.h"
 #include <stdio.h>
-/**
- * print_number - print an int numbers
- * @n: number tested
- * Return: Always 0
- */
-void print_number(int n)
-{
-	int i, j, digit, digits, power;
-	unsigned int temp, numchar, number;
+#include <string.h>
 
-	digit = 0;
-	if (n < 0)
-	{
-		_putchar('-');
-		temp = -n;
-	}
-	else
-	{
-		temp = n;
-	}
+char *infinite_add(char *n1, char *n2, char *r, int size_r) {
+    int len1 = strlen(n1);
+    int len2 = strlen(n2);
+    int carry = 0;
+    int i = len1 - 1;
+    int j = len2 - 1;
+    int k = 0;
 
-	number = temp;
+    if (len1 + 1 > size_r || len2 + 1 > size_r)
+        return 0;
 
-	while (number >= 10)
-	{
-		number = number / 10;
-		digit++;
-	}
-	digits = digit + 1;
-	power = 1;
-	i = 1;
+    while (i >= 0 || j >= 0) {
+        int digit1 = (i >= 0) ? (n1[i] - '0') : 0;
+        int digit2 = (j >= 0) ? (n2[j] - '0') : 0;
+        int sum = digit1 + digit2 + carry;
 
-	while (i < digits)
-	{
-		power = power * 10;
-		i++;
-	}
-	j = power;
-	while (j >= 1)
-	{
-		numchar = (temp / j) % 10;
-		_putchar(numchar + '0');
-		j = j / 10;
-	}
+        carry = sum / 10;
+        if (k < size_r - 1)
+            r[k++] = (sum % 10) + '0';
+        else
+            return 0;
+
+        i--;
+        j--;
+    }
+
+    if (carry > 0) {
+        if (k < size_r - 1)
+            r[k++] = carry + '0';
+        else
+            return 0;
+    }
+
+    r[k] = '\0';
+
+    // Reverse the result
+    for (i = 0, j = k - 1; i < j; i++, j--) {
+        char temp = r[i];
+        r[i] = r[j];
+        r[j] = temp;
+    }
+
+    return r;
 }
