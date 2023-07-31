@@ -12,14 +12,13 @@ size_t looped_listint_len(const listint_t *head)
 	const listint_t *slow_ptr, *fast_ptr;
 	size_t length = 1;
 
-	/* If the list is empty or has only one node, there is no loop */
+	/* If the list is empty */
 	if (head == NULL || head->next == NULL)
 		return (0);
 
-	slow_ptr = head->next;  /* tortoise pointer */
-	fast_ptr = head->next->next;  /* hare pointer */
+	slow_ptr = head->next;
+	fast_ptr = head->next->next;
 
-	/* Floyd's cycle-finding algorithm */
 	while (fast_ptr != NULL)
 	{
 		if (slow_ptr == fast_ptr)
