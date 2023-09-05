@@ -1,45 +1,36 @@
 #include "main.h"
 
 /**
- * read_textfile - reads a text file and prints it to the POSIX standard output
- * @filename: name of the file to read
- * @letters: number of letters it should read and print
- * Return: number of letters it could read and print
+ * read_textfile - read a file text and print to stdout
+ * @filename:  Name of  the file
+ * @letters: the number of letters it should read and print
+ * Return: the actual number of letters it could read and print
  */
+
 ssize_t read_textfile(const char *filename, size_t letters)
 {
-	int fd;
-	char *buf;
-	ssize_t read_bytes, write_bytes;
+	register int _open, _read, _write;
+	register char *buffer = malloc(sizeof(char)  * letters);
 
-	buf = malloc(sizeof(char) * letters);
-	if (buf == NULL || filename == NULL)
-		return (0);
-
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
+	if (!(buffer))
 	{
-		free(buf);
+		free(buffer);
 		return (0);
 	}
-
-	read_bytes = read(fd, buf, letters);
-	if (read_bytes == -1)
+	if (!(filename))
 	{
-		free(buf);
-		close(fd);
 		return (0);
 	}
+	_open = open(filename, O_RDONLY);
+	_read = read(_open, buffer, letters);
+	_write = write(STDOUT_FILENO, buffer, _read);
 
-	write_bytes = write(STDOUT_FILENO, buf, read_bytes);
-	if (write_bytes == -1)
+	if (_open == -1 || _read == -1 || _write == -1 || !(_write == _read))
 	{
-		free(buf);
-		close(fd);
+		free(buffer);
 		return (0);
 	}
-
-	free(buf);
-	close(fd);
-	return (write_bytes);
+	free(buffer);
+	close(_open);
+	return (_write);
 }

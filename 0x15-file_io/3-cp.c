@@ -1,52 +1,48 @@
 #include "main.h"
-
 /**
- * main - entry point
- * description: copies the content of a file to another file
- * @argc: number of arguments
- * @argv: array of arguments
- * Return: 0 on success, 97-100 on failure
+ * main - copies the content of a file to another file
+ * @argc: argument count
+ * @argv: argument vector
+ * Return: 0 if success
  */
+
 int main(int argc, char *argv[])
 {
-	int fd_from, fd_to, read_bytes, write_bytes;
-	char buf[1024];
+	int _file1, _file2, _read, c1, c2;
+	char buffer[1024];
 
 	if (argc != 3)
+	{
 		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n"), exit(97);
-
-	/* open file_from */
-	fd_from = open(argv[1], O_RDONLY);
-	if (fd_from == -1)
+	}
+	_file1 = open(argv[1], O_RDONLY);
+	if (_file1 < 0)
 	{
 		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
 		exit(98);
 	}
-
-	/* open file_to */
-	fd_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
-	if (fd_to == -1)
-		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]), exit(99);
-
-	/* read from file_from and write to file_to */
-	while ((read_bytes = read(fd_from, buf, 1024)) > 0)
+	_file2 = open(argv[2], O_TRUNC | O_CREAT | O_WRONLY, 0664);
+	while ((_read = read(_file1, buffer, 1024)) > 0)
 	{
-		write_bytes = write(fd_to, buf, read_bytes);
-		if (write_bytes == -1)
+		if (_file2 < 0 || (write(_file2, buffer, _read) != _read))
+		{
 			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]), exit(99);
+		}
 	}
-
-	if (read_bytes == -1)
+	if (_read < 0)
 	{
 		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
 		exit(98);
 	}
-
-	if (close(fd_from) == -1)
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_from), exit(100);
-
-	if (close(fd_to) == -1)
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_to), exit(100);
-
+	c1 = close(_file1);
+	if (c1 < 0)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %i\n", _file1), exit(100);
+	}
+	c2 = close(_file2);
+	if (c2 < 0)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %i\n", _file2), exit(100);
+	}
 	return (0);
 }
